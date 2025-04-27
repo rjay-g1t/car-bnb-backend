@@ -1,0 +1,711 @@
+{
+  "info": {
+    "_postman_id": "d5a9f876-6d3b-4c1b-9a8e-1b7e1d5f4a21",
+    "name": "CarBnB API",
+    "description": "API collection for CarBnB car rental application",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Authentication",
+      "item": [
+        {
+          "name": "Register",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"name\": \"John Doe\",\n    \"email\": \"john@example.com\",\n    \"phone\": \"1234567890\",\n    \"password\": \"password123\",\n    \"passwordConfirm\": \"password123\",\n    \"userType\": \"both\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/auth/register",
+              "host": ["{{base_url}}"],
+              "path": ["auth", "register"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Login",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const response = pm.response.json();",
+                  "if (response.token) {",
+                  "    pm.environment.set('token', response.token);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"email\": \"john@example.com\",\n    \"password\": \"password123\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/auth/login",
+              "host": ["{{base_url}}"],
+              "path": ["auth", "login"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Refresh Token",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/auth/refresh",
+              "host": ["{{base_url}}"],
+              "path": ["auth", "refresh"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "User",
+      "item": [
+        {
+          "name": "Get Profile",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/users/profile",
+              "host": ["{{base_url}}"],
+              "path": ["users", "profile"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update Profile",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"name\": \"John Smith\",\n    \"phone\": \"0987654321\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/users/profile",
+              "host": ["{{base_url}}"],
+              "path": ["users", "profile"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get User Bookings",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/users/bookings",
+              "host": ["{{base_url}}"],
+              "path": ["users", "bookings"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "KYC",
+      "item": [
+        {
+          "name": "Submit KYC",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"idProof\": \"id-document-url.jpg\",\n    \"addressProof\": \"address-document-url.jpg\",\n    \"drivingLicense\": \"license-document-url.jpg\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/kyc/submit",
+              "host": ["{{base_url}}"],
+              "path": ["kyc", "submit"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get KYC Status",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/kyc/status",
+              "host": ["{{base_url}}"],
+              "path": ["kyc", "status"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Cars",
+      "item": [
+        {
+          "name": "Create Car",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"make\": \"Toyota\",\n  \"model\": \"Camry\",\n  \"year\": 2020,\n  \"color\": \"Black\",\n  \"transmission\": \"automatic\",\n  \"fuelType\": \"petrol\",\n  \"seats\": 5,\n  \"location\": {\n    \"address\": \"123 Main St\",\n    \"city\": \"San Francisco\",\n    \"state\": \"CA\",\n    \"zipCode\": \"94105\",\n    \"coordinates\": [-122.419416, 37.774929]\n  },\n  \"dailyRate\": 50,\n  \"weeklyRate\": 300,\n  \"monthlyRate\": 1200,\n  \"features\": [\"GPS\", \"Bluetooth\", \"Backup Camera\"],\n  \"description\": \"Well maintained Toyota Camry\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/cars",
+              "host": ["{{base_url}}"],
+              "path": ["cars"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get All Cars",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/cars",
+              "host": ["{{base_url}}"],
+              "path": ["cars"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Car",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/cars/:id",
+              "host": ["{{base_url}}"],
+              "path": ["cars", ":id"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "{{car_id}}"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update Car",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"dailyRate\": 60,\n    \"weeklyRate\": 350,\n    \"description\": \"Updated description\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/cars/:id",
+              "host": ["{{base_url}}"],
+              "path": ["cars", ":id"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "{{car_id}}"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Car",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/cars/:id",
+              "host": ["{{base_url}}"],
+              "path": ["cars", ":id"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "{{car_id}}"
+                }
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Search",
+      "item": [
+        {
+          "name": "Search Cars by Location",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/search?lat=37.774929&lng=-122.419416&distance=10",
+              "host": ["{{base_url}}"],
+              "path": ["search"],
+              "query": [
+                {
+                  "key": "lat",
+                  "value": "37.774929"
+                },
+                {
+                  "key": "lng",
+                  "value": "-122.419416"
+                },
+                {
+                  "key": "distance",
+                  "value": "10"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Filter Search Results",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/search/filter?dailyRate[lte]=100&sort=-dailyRate&page=1&limit=10",
+              "host": ["{{base_url}}"],
+              "path": ["search", "filter"],
+              "query": [
+                {
+                  "key": "dailyRate[lte]",
+                  "value": "100"
+                },
+                {
+                  "key": "sort",
+                  "value": "-dailyRate"
+                },
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "limit",
+                  "value": "10"
+                }
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Bookings",
+      "item": [
+        {
+          "name": "Create Booking",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"car\": \"{{car_id}}\",\n  \"startDate\": \"2023-07-15\",\n  \"endDate\": \"2023-07-20\",\n  \"pickupAddress\": \"123 Main St, San Francisco, CA\",\n  \"dropoffAddress\": \"123 Main St, San Francisco, CA\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/bookings",
+              "host": ["{{base_url}}"],
+              "path": ["bookings"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Booking",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/bookings/:id",
+              "host": ["{{base_url}}"],
+              "path": ["bookings", ":id"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "{{booking_id}}"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update Booking",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"status\": \"confirmed\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/bookings/:id",
+              "host": ["{{base_url}}"],
+              "path": ["bookings", ":id"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "{{booking_id}}"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Cancel Booking",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"cancellationReason\": \"Change of plans\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/bookings/:id",
+              "host": ["{{base_url}}"],
+              "path": ["bookings", ":id"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "{{booking_id}}"
+                }
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Payments",
+      "item": [
+        {
+          "name": "Process Payment",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/payments/process/:bookingId",
+              "host": ["{{base_url}}"],
+              "path": ["payments", "process", ":bookingId"],
+              "variable": [
+                {
+                  "key": "bookingId",
+                  "value": "{{booking_id}}"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Confirm Payment",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"paymentIntentId\": \"pi_123456789\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/payments/confirm",
+              "host": ["{{base_url}}"],
+              "path": ["payments", "confirm"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Payment History",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/payments/history",
+              "host": ["{{base_url}}"],
+              "path": ["payments", "history"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Ratings",
+      "item": [
+        {
+          "name": "Rate Owner",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"booking\": \"{{booking_id}}\",\n    \"score\": 5,\n    \"comment\": \"Great owner, very responsive!\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/ratings/owner",
+              "host": ["{{base_url}}"],
+              "path": ["ratings", "owner"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Rate Renter",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"booking\": \"{{booking_id}}\",\n    \"score\": 5,\n    \"comment\": \"Excellent renter, returned the car in good condition.\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/ratings/renter",
+              "host": ["{{base_url}}"],
+              "path": ["ratings", "renter"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Rate Car",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"booking\": \"{{booking_id}}\",\n    \"score\": 4,\n    \"comment\": \"Great car, clean and well maintained.\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/ratings/car",
+              "host": ["{{base_url}}"],
+              "path": ["ratings", "car"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Owner Ratings",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/ratings/owner/:id",
+              "host": ["{{base_url}}"],
+              "path": ["ratings", "owner", ":id"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "{{owner_id}}"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Renter Ratings",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/ratings/renter/:id",
+              "host": ["{{base_url}}"],
+              "path": ["ratings", "renter", ":id"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "{{renter_id}}"
+                }
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ]
+}
